@@ -1,7 +1,9 @@
+package io.github.singhalmradul;
+
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -45,7 +47,6 @@ public class MusicPlayer extends Application {
     public static void main(String... args) {
         launch(args);
     }
-
     private VBox vb, vb2;
     private Stage stage;
     private MenuItem openFile, openFolder;
@@ -70,6 +71,10 @@ public class MusicPlayer extends Application {
 
     }
 
+    public InputStream getResource(String location) {
+        return MusicPlayer.class.getClassLoader().getResourceAsStream(location);
+    }
+
     /**
      * @see javafx.application.Application#start(javafx.stage.Stage)
      */
@@ -80,7 +85,7 @@ public class MusicPlayer extends Application {
 
         try {
 
-            stage.getIcons().add(new Image(new FileInputStream("img/logo.png"), 32, 32, true, true));
+            stage.getIcons().add(new Image(getResource("static/assets/logo.png"), 32, 32, true, true));
             stage.setScene(getMainPlayer());
 
         } catch (FileNotFoundException e) {
@@ -167,18 +172,18 @@ public class MusicPlayer extends Application {
 
             if (imageData != null) {
 
-                albumArtwork = "img/album-artwork." + id3v2Tag.getAlbumImageMimeType().substring(6);
+                albumArtwork = "static/assets/album-artwork." + id3v2Tag.getAlbumImageMimeType().substring(6);
                 RandomAccessFile file = new RandomAccessFile(albumArtwork, "rw");
                 file.write(imageData);
                 file.close();
 
                 try {
 
-                    artwork.setImage(new Image(new FileInputStream(new File(albumArtwork)), 100, 100, true, true));
+                    artwork.setImage(new Image(getResource(albumArtwork), 100, 100, true, true));
 
                 } catch (Exception e) {
 
-                    artwork.setImage(new Image(new FileInputStream("img/louis-tomlinson.png"), 100, 100, true, true));
+                    artwork.setImage(new Image(getResource("static/assets/louis-tomlinson.png"), 100, 100, true, true));
 
                 }
             }
@@ -207,13 +212,13 @@ public class MusicPlayer extends Application {
         songSlider.setOnMouseDragged(event -> mediaPlayer.seek(Duration.seconds(songSlider.getValue())));
 
         logo = new JFXButton("",
-                new ImageView(new Image(new FileInputStream("img/logo.png"), 24, 24, true, true)));
+                new ImageView(new Image(getResource("static/assets/logo.png"), 24, 24, true, true)));
         logo.setContextMenu(cm);
         logo.setTooltip(new Tooltip("file"));
         logo.setOnAction(e -> cm.show(stage));
 
         openFile = new MenuItem("open file",
-                new ImageView(new Image(new FileInputStream("img/note.png"), 24, 24, true, true)));
+                new ImageView(new Image(getResource("static/assets/note.png"), 24, 24, true, true)));
         openFile.setOnAction(e -> {
 
             FileChooser fc = new FileChooser();
@@ -226,7 +231,7 @@ public class MusicPlayer extends Application {
         });
 
         openFolder = new MenuItem("open folder",
-                new ImageView(new Image(new FileInputStream("img/music-folder.png"), 24, 24, true, true)));
+                new ImageView(new Image(getResource("static/assets/music-folder.png"), 24, 24, true, true)));
         openFolder.setOnAction(e -> {
 
             DirectoryChooser dc = new DirectoryChooser();
@@ -244,14 +249,14 @@ public class MusicPlayer extends Application {
         stageTitle.setFont(Font.font("Berlin Sans FB", FontWeight.MEDIUM, 15));
 
         bt = new JFXButton("",
-                new ImageView(new Image(new FileInputStream("img/miniPlayer.png"), 16, 16, true, true)));
+                new ImageView(new Image(getResource("static/assets/miniPlayer.png"), 16, 16, true, true)));
 
         minimize = new JFXButton("",
-                new ImageView(new Image(new FileInputStream("img/minimize.png"), 16, 16, true, true)));
+                new ImageView(new Image(getResource("static/assets/minimize.png"), 16, 16, true, true)));
         minimize.setOnAction(event -> stage.setIconified(true));
 
         exit = new JFXButton("",
-                new ImageView(new Image(new FileInputStream("img/cancel.png"), 16, 16, true, true)));
+                new ImageView(new Image(getResource("static/assets/cancel.png"), 16, 16, true, true)));
         exit.setOnAction(event -> stop());
 
         hb7 = new HBox(10, bt, minimize, exit);
@@ -275,22 +280,22 @@ public class MusicPlayer extends Application {
         });
 
         artwork = new ImageView(
-                new Image(new FileInputStream("img/louis-tomlinson.png"), 100, 100, true, true));
+                new Image(getResource("static/assets/louis-tomlinson.png"), 100, 100, true, true));
         artwork.setEffect(new DropShadow());
 
         previousButton = new JFXButton("",
-                new ImageView(new Image(new FileInputStream("img/back-arrows.png"), 32, 32, true, true)));
+                new ImageView(new Image(getResource("static/assets/back-arrows.png"), 32, 32, true, true)));
 
         playButton = new JFXButton("",
-                new ImageView(new Image(new FileInputStream("img/play.png"), 32, 32, true, true)));
+                new ImageView(new Image(getResource("static/assets/play.png"), 32, 32, true, true)));
         playButton.setOnAction(event -> play());
 
         pause = new JFXButton("",
-                new ImageView(new Image(new FileInputStream("img/pause.png"), 32, 32, true, true)));
+                new ImageView(new Image(getResource("static/assets/pause.png"), 32, 32, true, true)));
         pause.setOnAction(event -> pause());
 
         nextButton = new JFXButton("",
-                new ImageView(new Image(new FileInputStream("img/forward-arrows.png"), 32, 32, true, true)));
+                new ImageView(new Image(getResource("static/assets/forward-arrows.png"), 32, 32, true, true)));
 
         hb1 = new HBox(30, previousButton, playButton, nextButton);
         hb1.setAlignment(Pos.CENTER);
@@ -308,7 +313,7 @@ public class MusicPlayer extends Application {
         bp.setPadding(new Insets(5, 0, 10, 0));
 
         mute = new JFXButton("",
-                new ImageView(new Image(new FileInputStream("img/mute.png"), 32, 32, true, true)));
+                new ImageView(new Image(getResource("static/assets/mute.png"), 32, 32, true, true)));
         mute.setOnAction(event -> {
 
             if (lastVolume == 0)
@@ -318,7 +323,7 @@ public class MusicPlayer extends Application {
 
         });
 
-        volumeIcon = new ImageView(new Image(new FileInputStream("img/speaker.png"), 32, 32, true, true));
+        volumeIcon = new ImageView(new Image(getResource("static/assets/speaker.png"), 32, 32, true, true));
 
         volume = new JFXButton("", volumeIcon);
         volume.setOnAction(event -> {
@@ -402,18 +407,18 @@ public class MusicPlayer extends Application {
             try {
 
                 if (volumeSlider.getValue() < 25)
-                    volumeIcon.setImage(new Image(new FileInputStream("img/speaker1.png"), 32, 32, true, true));
+                    volumeIcon.setImage(new Image(getResource("static/assets/speaker1.png"), 32, 32, true, true));
 
                 else if (volumeSlider.getValue() < 50)
-                    volumeIcon.setImage(new Image(new FileInputStream("img/speaker2.png"), 32, 32, true, true));
+                    volumeIcon.setImage(new Image(getResource("static/assets/speaker2.png"), 32, 32, true, true));
 
                 else if (volumeSlider.getValue() < 75)
-                    volumeIcon.setImage(new Image(new FileInputStream("img/speaker3.png"), 32, 32, true, true));
+                    volumeIcon.setImage(new Image(getResource("static/assets/speaker3.png"), 32, 32, true, true));
 
                 else
-                    volumeIcon.setImage(new Image(new FileInputStream("img/speaker.png"), 32, 32, true, true));
+                    volumeIcon.setImage(new Image(getResource("static/assets/speaker.png"), 32, 32, true, true));
 
-            } catch (FileNotFoundException e) {
+            } catch (Exception e) {
 
                 System.err.println(e.getLocalizedMessage());
 
@@ -462,8 +467,8 @@ public class MusicPlayer extends Application {
         album.setText("");
         stageTitle.setText("music");
         try {
-            artwork.setImage(new Image(new FileInputStream("img/louis-tomlinson.png"), 100, 100, true, true));
-        } catch (FileNotFoundException e) {
+            artwork.setImage(new Image(getResource("static/assets/louis-tomlinson.png"), 100, 100, true, true));
+        } catch (Exception e) {
         }
 
     }
