@@ -1,5 +1,4 @@
 # music-player
 
-  - A music player implemented in java using javafx.
+  - A music player implemented in scala using javafx.
   - Yet to be completed.
-  - Feel free to contribute
